@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Fiche journalière — Mettet-Fer</title>
+<style>
+  :root{--bleu:#1d4e89;--vert:#2e8b57;--gris:#f4f6f9;--bord:#d7dce3;--txt:#1f2733;--gris-txt:#5a6472;--rouge:#c0392b;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--gris);color:var(--txt);font-size:17px;line-height:1.4;padding-bottom:130px}
+  header{background:var(--bleu);color:#fff;padding:16px 18px;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+  header h1{margin:0;font-size:19px;font-weight:700}
+  header p{margin:2px 0 0;font-size:13px;opacity:.85}
+  .wrap{max-width:640px;margin:0 auto;padding:14px}
+  .card{background:#fff;border:1px solid var(--bord);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .card h2{margin:0 0 12px;font-size:15px;text-transform:uppercase;letter-spacing:.5px;color:var(--bleu)}
+  label{display:block;font-size:14px;font-weight:600;color:var(--gris-txt);margin:12px 0 5px}
+  label:first-of-type{margin-top:0}
+  input,select,textarea{width:100%;padding:13px;font-size:17px;border:1.5px solid var(--bord);border-radius:10px;background:#fff;color:var(--txt);font-family:inherit}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--bleu)}
+  textarea{min-height:70px;resize:vertical}
+  .row{display:flex;gap:10px}
+  .row>div{flex:1}
+  .chantier{border:1.5px solid var(--bord);border-radius:12px;padding:14px;margin-bottom:12px;background:#fafbfc;position:relative}
+  .chantier .num{display:inline-block;background:var(--bleu);color:#fff;font-size:13px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+  .del{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--rouge);font-size:14px;font-weight:600;padding:4px}
+  .btn{display:block;width:100%;padding:15px;font-size:16px;font-weight:700;border:none;border-radius:12px;cursor:pointer;text-align:center;text-decoration:none}
+  .btn-add{background:#eaf1f9;color:var(--bleu);border:1.5px dashed var(--bleu)}
+  .actions{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--bord);padding:12px 14px;box-shadow:0 -2px 10px rgba(0,0,0,.08);z-index:20}
+  .actions .inner{max-width:640px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;align-items:stretch}
+  .btn-envoi{background:var(--vert);color:#fff;flex:1 1 100%;font-size:17px}
+  .btn-wa{background:#25d366;color:#fff;flex:1;min-width:90px;padding:11px;font-size:14px}
+  .btn-mail{background:var(--bleu);color:#fff;flex:1;min-width:90px;padding:11px;font-size:14px}
+  .btn-dl{background:#fff;color:var(--txt);border:1.5px solid var(--bord);flex:0 0 52px;padding:11px}
+  .hint{font-size:13px;color:var(--gris-txt);margin-top:4px}
+  .km-info{font-size:13px;color:var(--bleu);font-weight:600;margin-top:4px}
+  .seg{display:flex;border:1.5px solid var(--bord);border-radius:10px;overflow:hidden;margin-top:4px}
+  .seg label{flex:1;margin:0;padding:0}
+  .seg input{display:none}
+  .seg span{display:block;padding:11px;text-align:center;font-weight:700;color:var(--gris-txt);background:#fff}
+  .seg label:first-child span{border-right:1px solid var(--bord)}
+  .seg input:checked+span{background:var(--bleu);color:#fff}
+  .types{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+  .types label{margin:0;font-weight:600;font-size:13px;border:1.5px solid var(--bord);border-radius:20px;padding:8px 12px;cursor:pointer;color:var(--gris-txt);display:inline-flex;align-items:center;gap:6px;background:#fff}
+  .types input{width:auto;margin:0;padding:0}
+  .types label:has(input:checked){border-color:var(--bleu);background:#eaf1f9;color:var(--bleu)}
+  .daybox{background:#eaf1f9;border:1.5px solid var(--bleu);border-radius:10px;padding:10px 12px;margin-top:8px;font-weight:700;color:var(--bleu)}
+  .warn{color:var(--rouge);font-weight:700}
+  .req{color:var(--rouge)}
+</style>
+</head>
+<body>
+<header>
+  <h1>🔧 Fiche journalière</h1>
+  <p>Mettet-Fer — à remplir chaque soir · <b>v3</b> (build 11/08/2026)</p>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <h2>👤 Identité</h2>
+    <label>Date</label>
+    <input type="date" id="date">
+    <label>Ton nom <span class="req">*</span></label>
+    <select id="nom"></select>
+    <label>Type de journée</label>
+    <select id="typejour" onchange="onTypeJour()">
+      <option value="Presté">Presté (jour de travail)</option>
+      <option value="Congé payé">Congé payé</option>
+      <option value="Maladie">Maladie</option>
+      <option value="Jour férié">Jour férié</option>
+      <option value="Récupération">Récupération</option>
+      <option value="Formation/école">Formation / école</option>
+      <option value="Absence justifiée">Absence justifiée</option>
+      <option value="Absence injustifiée">Absence injustifiée</option>
+      <option value="Congé sans solde">Congé sans solde</option>
+      <option value="Chômage temporaire">Chômage temporaire</option>
+      <option value="Autre">Autre</option>
+    </select>
+  </div>
+
+  <div class="card" id="cardJournee">
+    <h2>⏱️ Heures de la journée</h2>
+    <div class="row">
+      <div><label>Arrivée <span class="req">*</span></label><input type="time" id="heureDebut" onchange="calcDay()"></div>
+      <div><label>Départ <span class="req">*</span></label><input type="time" id="heureFin" onchange="calcDay()"></div>
+      <div><label>Pause (min)</label><input type="number" id="pause" inputmode="numeric" value="30" onchange="calcDay()"></div>
+    </div>
+    <div class="daybox" id="dayhours">Renseigne l'arrivée et le départ.</div>
+    <p class="hint">Une seule arrivée / un seul départ pour la journée, puis répartis tes heures par chantier.</p>
+  </div>
+
+  <div class="card" id="cardChantiers">
+    <h2>🏗️ Chantiers de la journée</h2>
+    <div id="chantiers"></div>
+    <button type="button" class="btn btn-add" onclick="addChantier()">+ Ajouter un chantier</button>
+    <div class="daybox" id="repartinfo" style="display:none"></div>
+    <p class="hint">La somme des heures des chantiers doit égaler le total de la journée.</p>
+  </div>
+
+  <div class="card" id="cardDepl" style="display:none">
+    <h2>🚚 Déplacements</h2>
+    <label>Point de départ</label>
+    <input type="text" id="depart" value="Dépôt Mettet-Fer">
+    <label>Total km de la journée (aller-retour) <span id="kmauto" style="color:#2e8b57;font-weight:700"></span></label>
+    <input type="number" id="km" inputmode="numeric" placeholder="Somme des km chantier" oninput="kmManual=true">
+    <label>Détails / autres lieux visités</label>
+    <textarea id="lieux" placeholder="Fournisseur, détour, etc. (facultatif)"></textarea>
+  </div>
+
+  <div class="card">
+    <h2>📝 Remarques</h2>
+    <textarea id="remarques" placeholder="Problèmes, matériel à commander, souci avec la fiche..."></textarea>
+  </div>
+</div>
+
+<div class="actions">
+  <div class="inner">
+    <a href="#" class="btn btn-envoi" onclick="return envoyer('auto')">✅ Envoyer au bureau</a>
+    <a href="#" class="btn btn-wa" onclick="return envoyer('wa')">WhatsApp</a>
+    <a href="#" class="btn btn-mail" onclick="return envoyer('mail')">Email</a>
+    <a href="#" class="btn btn-dl" onclick="return envoyer('dl')">⬇️</a>
+  </div>
+</div>
+
+<div id="okmsg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:16px;padding:26px;max-width:320px;text-align:center;margin:20px">
+    <div style="font-size:46px">✅</div>
+    <h3 style="margin:8px 0;color:#2e8b57">Fiche envoyée !</h3>
+    <p style="color:#5a6472;font-size:15px">Ta fiche est bien partie au bureau. Merci !</p>
+    <button class="btn btn-envoi" style="margin-top:10px" onclick="location.reload()">Nouvelle fiche</button>
+  </div>
+</div>
+
+<script>
+  const WEBHOOK_MAKE    = "https://hook.eu1.make.com/vxu78djp2awgxygp1zsjf1ddjawzsfaw";
+  const WHATSAPP_BUREAU = "32470000000";
+  const EMAIL_BUREAU    = "info@mettet-fer.be";
+
+  const WORKERS = ["Lloyd Lambert", "Quentin Dupont", "Benjamin Offrois", "Guillaume Delisse", "Thomas Pauly", "Arnaud Poulain", "Benjamin Dupont"];
+  const JOBS = ["A-2026-001 — TDN Sprl — Borne anti-bélier poteau béton", "A-2026-002 — TDN Sprl — Guide quai camion", "A-2026-017 — Aldi — Central Gembloux", "A-2026-018 — Argéa — Mont-Saint-Guibert", "A-2026-019 — Bodart-Ricciardi", "A-2026-021 — Nonet — Fosses-la-Ville", "A-2026-022 — Nonet — Villers-la-Ville", "A-2026-023 — VMA — LLN 796029-22131-1MIC2-MLLN", "A-2026-024 — Atelier de la pomme de terre — Modification installation semaine 31 2026", "A-2026-025 — Hoedenaeken Damien — Cornière L galva 100°", "A-2026-031 — Danneels SBA — Étagère courbe", "A-2026-033 — ICM — 500 pièces galva ep4mm profil toiture", "A-2026-036 — MHN — Découpe laser sem 32-2026", "A-2026-039 — Aldi — Châtelet régie cornières de protection", "A-2026-043 — ICM — Profil galva ep2mm plié BC 12613", "A-2026-044 — ICM — Découpe laser platines Tero ep2mm"];
+  const labelOf = r => r.replace(/^A-\d{4}-\d+\s*[—-]\s*/, '');
+
+  document.getElementById('nom').innerHTML = '<option value="">— choisis ton nom —</option>' + WORKERS.map(n=>'<option value="'+n+'">'+n+'</option>').join('') + '<option value="Autre">Autre…</option>';
+  document.getElementById('date').valueAsDate = new Date();
+  const nomInput = document.getElementById('nom');
+  const savedNom = localStorage.getItem('mf_nom') || '';
+  if(savedNom && WORKERS.includes(savedNom)) nomInput.value = savedNom;
+  nomInput.addEventListener('change', ()=>localStorage.setItem('mf_nom', nomInput.value));
+
+  let kmManual=false, compteur=0, dayMin=0;
+
+  function onTypeJour(){
+    const presté = document.getElementById('typejour').value === 'Presté';
+    document.getElementById('cardJournee').style.display = presté ? '' : 'none';
+    document.getElementById('cardChantiers').style.display = presté ? '' : 'none';
+    if(!presté) document.getElementById('cardDepl').style.display='none'; else updateDepl();
+  }
+
+  function chantierOptions(){
+    return '<option value="">— choisis le chantier —</option>'
+      + JOBS.map(r=>'<option value="'+r.replace(/"/g,'&quot;')+'">'+labelOf(r).replace(/"/g,'&quot;')+'</option>').join('')
+      + '<option value="Interne Mettet-Fer">Interne Mettet-Fer</option>'
+      + '<option value="__autre__">Autre (préciser)…</option>';
+  }
+
+  function addChantier(){
+    compteur++; const n=compteur;
+    const div=document.createElement('div');
+    div.className='chantier'; div.dataset.n=n;
+    div.innerHTML = `
+      <span class="num">Chantier ${n}</span>
+      <button type="button" class="del" onclick="this.parentNode.remove();recalcRepart();recalcKm();updateDepl()">✕ Retirer</button>
+      <label>Chantier / Affaire <span class="req">*</span></label>
+      <select class="c-chantier" onchange="onChantierSel(this)">${chantierOptions()}</select>
+      <div class="c-autre-wrap" style="display:none">
+        <label>Préciser le chantier</label>
+        <input type="text" class="c-autre" placeholder="Nom du chantier / client">
+      </div>
+      <label>Lieu du travail</label>
+      <div class="seg">
+        <label><input type="radio" name="loc-${n}" class="c-loc" value="Atelier" checked onchange="onLoc(this)"><span>🏭 Atelier</span></label>
+        <label><input type="radio" name="loc-${n}" class="c-loc" value="Chantier" onchange="onLoc(this)"><span>🏗️ Chantier (hors dépôt)</span></label>
+      </div>
+      <div class="c-chantier-only" style="display:none">
+        <label>Km aller-retour <span class="req">*</span></label>
+        <input type="number" class="c-km" inputmode="numeric" placeholder="Ex : 48" oninput="onKm()">
+        <label>Adresse / précision (facultatif)</label>
+        <input type="text" class="c-precision" placeholder="Rue, n°, commune / détail">
+      </div>
+      <label>Heures sur ce chantier <span class="req">*</span></label>
+      <input type="number" class="c-heures" inputmode="decimal" step="0.25" min="0" placeholder="Ex : 3.5" oninput="recalcRepart()" onchange="recalcRepart()">
+      <label>Type(s) de travail</label>
+      <div class="types">
+        ${["Laser","Pliage CN","Soudure/assemblage","Pose/chantier","Plans-bureau","Autre"].map(t=>`<label><input type="checkbox" class="c-type" value="${t}"><span>${t}</span></label>`).join('')}
+      </div>
+      <label>N° de commande(s) (facultatif)</label>
+      <input type="text" class="c-commande" placeholder="Ex : BC-1023">
+      <label>Travail réalisé</label>
+      <textarea class="c-travail" placeholder="Décris ce qui a été fait"></textarea>
+      <label>Fournitures / matériel utilisés</label>
+      <textarea class="c-fourn" placeholder="Ex : 20m tube 50/50, 3 raccords..."></textarea>`;
+    document.getElementById('chantiers').appendChild(div);
+  }
+
+  function onChantierSel(el){
+    const c=el.closest('.chantier');
+    c.querySelector('.c-autre-wrap').style.display = el.value==='__autre__' ? '' : 'none';
+  }
+  function onLoc(el){
+    const c=el.closest('.chantier');
+    c.querySelector('.c-chantier-only').style.display = el.value==='Chantier' ? '' : 'none';
+    recalcKm(); updateDepl();
+  }
+  function onKm(){ kmManual=false; recalcKm(); }
+
+  function anyChantier(){ return [...document.querySelectorAll('.c-loc:checked')].some(r=>r.value==='Chantier'); }
+  function updateDepl(){
+    const presté=document.getElementById('typejour').value==='Presté';
+    document.getElementById('cardDepl').style.display=(presté && anyChantier())?'':'none';
+  }
+  function recalcKm(){
+    let tot=0,has=false;
+    document.querySelectorAll('.chantier').forEach(c=>{
+      const loc=c.querySelector('.c-loc:checked');
+      if(loc && loc.value==='Chantier'){ const k=parseFloat(c.querySelector('.c-km').value); if(!isNaN(k)){tot+=k;has=true;} }
+    });
+    const auto=document.getElementById('kmauto');
+    if(has && !kmManual){ document.getElementById('km').value=tot; auto.textContent='(auto : '+tot+' km)'; }
+    else if(has){ auto.textContent='(chantiers : '+tot+' km)'; } else { auto.textContent=''; }
+  }
+
+  const toMin=t=>{ if(!t) return NaN; const p=t.split(':'); const h=parseInt(p[0],10); const m=parseInt(p[1]||'0',10); if(isNaN(h)) return NaN; return h*60+m; };
+  const fmtH=m=>(m/60).toFixed(2).replace('.',',')+' h';
+  function calcDay(){
+    const d=document.getElementById('heureDebut').value, f=document.getElementById('heureFin').value;
+    const p=parseInt(document.getElementById('pause').value)||0;
+    const box=document.getElementById('dayhours');
+    const a=toMin(d), b=toMin(f);
+    if(!isNaN(a)&&!isNaN(b)){ let m=b-a-p; if(m<0)m+=1440; dayMin=m; box.textContent='⏱️ Journée : '+fmtH(m)+'  (pause '+p+' min déduite)'; }
+    else { dayMin=0; box.textContent="Renseigne l'arrivée et le départ."; }
+    recalcRepart();
+  }
+  function sumChantierHeures(){ let s=0; document.querySelectorAll('.c-heures').forEach(i=>{ const v=parseFloat(i.value); if(!isNaN(v)) s+=v; }); return s; }
+  function recalcRepart(){
+    const box=document.getElementById('repartinfo');
+    if(document.querySelectorAll('.chantier').length===0){ box.style.display='none'; return; }
+    box.style.display='';
+    const rep=sumChantierHeures(), jour=dayMin/60, diff=Math.round((rep-jour)*100)/100;
+    if(Math.abs(diff)<=0.1){ box.className='daybox'; box.textContent='✅ Réparti : '+rep.toFixed(2).replace('.',',')+' h  =  journée '+jour.toFixed(2).replace('.',',')+' h'; }
+    else { box.className='daybox warn'; box.textContent='⚠️ Réparti '+rep.toFixed(2).replace('.',',')+' h ≠ journée '+jour.toFixed(2).replace('.',',')+' h (écart '+(diff>0?'+':'')+diff.toFixed(2).replace('.',',')+' h)'; }
+  }
+
+  function buildData(){
+    const date=document.getElementById('date').value;
+    const nom=document.getElementById('nom').value.trim();
+    const typejour=document.getElementById('typejour').value;
+    const base={date, ouvrier:nom, type_journee:typejour,
+      depart:document.getElementById('depart').value.trim(),
+      lieux:document.getElementById('lieux').value.trim(),
+      remarques:document.getElementById('remarques').value.trim(),
+      envoye_le:new Date().toISOString()};
+    if(typejour!=='Presté') return Object.assign(base,{arrivee:'',depart_h:'',pause_min:0,chantiers:[],km:0,total_heures_dec:0,heures_reparties_dec:0});
+    const chantiers=[];
+    document.querySelectorAll('.chantier').forEach((c,i)=>{
+      const g=s=>(c.querySelector(s).value||'').trim();
+      const sel=c.querySelector('.c-chantier').value;
+      let ref, label;
+      if(sel==='__autre__'){ ref=g('.c-autre'); label=ref; }
+      else { ref=sel; label=sel==='Interne Mettet-Fer'?sel:labelOf(sel); }
+      const loc=(c.querySelector('.c-loc:checked')||{}).value||'Atelier';
+      const km=parseFloat(c.querySelector('.c-km').value);
+      const types=[...c.querySelectorAll('.c-type:checked')].map(x=>x.value);
+      const he=parseFloat(c.querySelector('.c-heures').value)||0;
+      chantiers.push({num:i+1, chantier:label, chantier_ref:ref, localisation:loc,
+        km_ar:(loc==='Chantier'&&!isNaN(km))?km:null, types_travail:types, heures_dec:+he.toFixed(2),
+        precision:g('.c-precision'), commande:g('.c-commande'), travail:g('.c-travail'), fournitures:g('.c-fourn')});
+    });
+    const kmTot=chantiers.reduce((s,c)=>s+(c.km_ar||0),0);
+    return Object.assign(base,{
+      arrivee:document.getElementById('heureDebut').value,
+      depart_h:document.getElementById('heureFin').value,
+      pause_min:parseInt(document.getElementById('pause').value)||0,
+      chantiers, km:parseInt(document.getElementById('km').value)||kmTot,
+      total_heures_dec:+(dayMin/60).toFixed(2),
+      heures_reparties_dec:+sumChantierHeures().toFixed(2)});
+  }
+
+  function buildTexte(){
+    const d=buildData(); let t=`FICHE JOURNALIÈRE\n${d.date} — ${d.ouvrier||'(nom manquant)'}\nType de journée : ${d.type_journee}\n`;
+    if(d.type_journee!=='Presté'){ if(d.remarques)t+=`\nRemarques : ${d.remarques}\n`; return t; }
+    t+=`Horaire : ${d.arrivee||'?'} → ${d.depart_h||'?'} (pause ${d.pause_min} min) = ${d.total_heures_dec}h\n`;
+    d.chantiers.forEach(c=>{
+      t+=`\n— CHANTIER ${c.num} — (${c.localisation})\n`;
+      t+=`Affaire : ${c.chantier||'-'}\n`;
+      t+=`Heures : ${c.heures_dec}h\n`;
+      if(c.types_travail.length) t+=`Type : ${c.types_travail.join(', ')}\n`;
+      if(c.km_ar) t+=`Km A/R : ${c.km_ar}\n`;
+      if(c.precision) t+=`Précision : ${c.precision}\n`;
+      if(c.commande) t+=`Commande(s) : ${c.commande}\n`;
+      if(c.travail) t+=`Travail : ${c.travail}\n`;
+      if(c.fournitures) t+=`Fournitures : ${c.fournitures}\n`;
+    });
+    if(d.km||d.depart||d.lieux){ t+=`\n— DÉPLACEMENTS —\n`; if(d.depart)t+=`Départ : ${d.depart}\n`; if(d.lieux)t+=`Détails : ${d.lieux}\n`; if(d.km)t+=`Km total : ${d.km} km\n`; }
+    if(d.remarques)t+=`\n— REMARQUES —\n${d.remarques}\n`;
+    t+=`\n=> TOTAL JOURNÉE : ${d.total_heures_dec}h (réparti ${d.heures_reparties_dec}h)\n`;
+    return t;
+  }
+
+  function valider(data){
+    if(!data.ouvrier){ alert("Merci de choisir ton nom avant d'envoyer."); return false; }
+    if(data.type_journee!=='Presté') return true;
+    if(!data.arrivee || !data.depart_h){ alert("Merci d'indiquer l'arrivée ET le départ de la journée."); return false; }
+    if(data.chantiers.length===0){ alert("Ajoute au moins un chantier, ou change le type de journée."); return false; }
+    for(const c of data.chantiers){
+      if(!c.chantier){ alert("Chantier "+c.num+" : choisis le chantier/affaire."); return false; }
+      if(!(c.heures_dec>0)){ alert("Chantier "+c.num+" : indique les heures passées."); return false; }
+      if(c.localisation==='Chantier' && !(c.km_ar>0)){ alert("Chantier "+c.num+" : les km sont obligatoires hors dépôt."); return false; }
+    }
+    if(Math.abs(data.heures_reparties_dec-data.total_heures_dec)>0.1){
+      if(!confirm("La somme des heures ("+data.heures_reparties_dec+"h) ≠ total journée ("+data.total_heures_dec+"h).\n\nEnvoyer quand même ?")) return false;
+    }
+    return true;
+  }
+
+  function envoyer(mode){
+    const data=buildData();
+    if(!valider(data)) return false;
+    const texte=buildTexte(); const date=data.date;
+    if(mode==='auto'){
+      if(WEBHOOK_MAKE){
+        const stamp=new Date().toISOString().replace(/[:.]/g,'-').slice(0,19);
+        const nomFichier='fiche_'+date+'_'+data.ouvrier.replace(/\s+/g,'-')+'_'+stamp+'.json';
+        const params=new URLSearchParams();
+        params.set('date',data.date); params.set('ouvrier',data.ouvrier); params.set('type_journee',data.type_journee);
+        params.set('km',data.km); params.set('total_heures',data.total_heures_dec);
+        params.set('filename',nomFichier); params.set('texte',texte); params.set('payload',JSON.stringify(data));
+        fetch(WEBHOOK_MAKE,{method:'POST',mode:'no-cors',body:params})
+          .then(()=>{document.getElementById('okmsg').style.display='flex';})
+          .catch(()=>{alert('Envoi impossible (réseau). Essaie WhatsApp ou Email.');});
+        return false;
+      } else mode='wa';
+    }
+    if(mode==='wa'){ window.open('https://wa.me/'+WHATSAPP_BUREAU+'?text='+encodeURIComponent(texte),'_blank'); }
+    else if(mode==='mail'){ window.location.href='mailto:'+EMAIL_BUREAU+'?subject='+encodeURIComponent('Fiche '+date+' - '+data.ouvrier)+'&body='+encodeURIComponent(texte); }
+    else if(mode==='dl'){ const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='fiche_'+date+'_'+data.ouvrier.replace(/\s+/g,'-')+'.json'; a.click(); }
+    return false;
+  }
+
+  onTypeJour();
+  addChantier();
+</script>
+</body>
+</html>
