@@ -52,7 +52,7 @@
 <body>
 <header>
   <h1>🔧 Fiche journalière</h1>
-  <p>Mettet-Fer — à remplir chaque soir · <b>v5</b> (build 26/08/2026)</p>
+  <p>Mettet-Fer — à remplir chaque soir · <b>v6</b> (build 27/08/2026)</p>
 </header>
 
 <div class="wrap">
@@ -137,7 +137,7 @@
   const EMAIL_BUREAU    = "info@mettet-fer.be";
 
   const WORKERS = ["Lloyd Lambert", "Quentin Dupont", "Benjamin Offrois", "Guillaume Delisse", "Thomas Pauly", "Arnaud Poulain", "Benjamin Dupont"];
-  const JOBS = ["A-2026-001 — TDN Sprl — Borne anti-bélier poteau béton", "A-2026-017 — Aldi — Central Gembloux", "A-2026-018 — Argéa — Mont-Saint-Guibert", "A-2026-019 — Bodart-Ricciardi", "A-2026-021 — Nonet — Fosses-la-Ville Phase 2", "A-2026-022 — Nonet — Villers-la-Ville", "A-2026-023 — VMA — LLN 796029-22131-1MIC2-MLLN", "A-2026-029 — ICM — Platines laser Logiplus B2 (Janus Part. SA)", "A-2026-031 — Danneels SBA — Étagère courbe", "A-2026-057 — Argéa — Garde-corps Andre Olivier 01A9004", "A-2026-058 — Frateur — Courbevoie-Haut vent colonne vegetale", "A-2026-059 — Argéa — Angleur Tilff CDF S1100 2025 001381", "A-2026-060 — Nonet — Kraainem garde-corps et supplements N230891", "A-2026-061 — Agri Garden — Chantier sem 27-2026", "A-2026-072 — SD Metal — 3 tôles acier 3 mm (réf Paternotte)", "A-2026-078 — Aldi — Enghien échelle", "A-2026-079 — MHN — Commande plancha decoupe laser", "A-2026-081 — Argéa — Panneaux polycarbonate chantier 3969 client Infrabel", "A-2026-082 — Agri Garden — Couvre-mur corten 2 mm", "A-2026-083 — Agri Garden — Bordure en U profil 22x64x102 mm", "A-2026-088 — ICM — LPM Emaillerie escalier mezzanine limons laser ep12mm", "A-2026-089 — ICM — Covalux Bastogne plats 200x20 laser", "A-2026-091 — ICM — Limons escalier Declerc Ciney laser ep12-15mm", "A-2026-092 — DC Mix — 36 plats de jonction renfort bequille ep12mm", "A-2026-093 — Château d'Annevoie — Tôle acier 4 mm URGENT", "A-2026-094 — ICM-Covalux — Bastogne pièce à refaire"];
+  const JOBS = ["A-2026-001 — TDN Sprl — Borne anti-bélier poteau béton", "A-2026-017 — Aldi — Central Gembloux", "A-2026-019 — Bodart-Ricciardi", "A-2026-021 — Nonet — Fosses-la-Ville Phase 2", "A-2026-022 — Nonet — Villers-la-Ville", "A-2026-023 — VMA — LLN 796029-22131-1MIC2-MLLN", "A-2026-029 — ICM — Platines laser Logiplus B2 (Janus Part. SA)", "A-2026-035 — Gobbe Xavier", "A-2026-057 — Argéa — Garde-corps Andre Olivier 01A9004", "A-2026-058 — Frateur — Courbevoie-Haut vent colonne vegetale", "A-2026-059 — Argéa — Angleur Tilff CDF S1100 2025 001381", "A-2026-060 — Nonet — Kraainem garde-corps et supplements N230891", "A-2026-061 — Agri Garden — Chantier sem 27-2026", "A-2026-072 — SD Metal — 3 tôles acier 3 mm (réf Paternotte)", "A-2026-078 — Aldi — Enghien échelle", "A-2026-081 — Argéa — Panneaux polycarbonate chantier 3969 client Infrabel", "A-2026-082 — Agri Garden — Couvre-mur corten 2 mm", "A-2026-083 — Agri Garden — Bordure en U profil 22x64x102 mm", "A-2026-088 — ICM — LPM Emaillerie escalier mezzanine limons laser ep12mm", "A-2026-089 — ICM — Covalux Bastogne plats 200x20 laser", "A-2026-091 — ICM — Limons escalier Declerc Ciney laser ep12-15mm", "A-2026-092 — DC Mix — 36 plats de jonction renfort bequille ep12mm", "A-2026-094 — ICM-Covalux — Bastogne pièce à refaire"];
   const labelOf = r => r.replace(/^A-\d{4}-\d+\s*[—-]\s*/, '');
 
   document.getElementById('nom').innerHTML = '<option value="">— choisis ton nom —</option>' + WORKERS.map(n=>'<option value="'+n+'">'+n+'</option>').join('') + '<option value="Autre">Autre…</option>';
