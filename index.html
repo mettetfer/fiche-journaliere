@@ -52,7 +52,7 @@
 <body>
 <header>
   <h1>🔧 Fiche journalière</h1>
-  <p>Mettet-Fer — à remplir chaque soir · <b>v8</b> (build 28/08/2026)</p>
+  <p>Mettet-Fer — à remplir chaque soir · <b>v9</b> (build 31/08/2026)</p>
 </header>
 
 <div class="wrap">
@@ -137,7 +137,7 @@
   const EMAIL_BUREAU    = "info@mettet-fer.be";
 
   const WORKERS = ["Lloyd Lambert", "Quentin Dupont", "Benjamin Offrois", "Guillaume Delisse", "Thomas Pauly", "Arnaud Poulain", "Benjamin Dupont"];
-  const JOBS = ["A-2026-001 — TDN Sprl — Borne anti-bélier poteau béton", "A-2026-004 — NG-Construction — Limons escalier découpe", "A-2026-017 — Aldi — Central Gembloux", "A-2026-019 — Bodart-Ricciardi", "A-2026-021 — Nonet — Fosses-la-Ville Phase 2", "A-2026-022 — Nonet — Villers-la-Ville", "A-2026-023 — VMA — LLN 796029-22131-1MIC2-MLLN", "A-2026-035 — Gobbe Xavier", "A-2026-057 — Argéa — Garde-corps Andre Olivier 01A9004", "A-2026-058 — Frateur — Courbevoie-Haut vent colonne vegetale", "A-2026-059 — Argéa — Angleur Tilff CDF S1100 2025 001381", "A-2026-060 — Nonet — Kraainem garde-corps et supplements N230891", "A-2026-078 — Aldi — Enghien échelle", "A-2026-081 — Argéa — Panneaux polycarbonate chantier 3969 client Infrabel", "A-2026-089 — ICM — Covalux Bastogne plats 200x20 laser", "A-2026-091 — ICM — Limons escalier Declerc Ciney laser ep12-15mm", "A-2026-095 — Danneels — Découpe laser Hannu et Mettet", "A-2026-100 — Arti Metal Ferronnerie — Decoupe urgente acier 8mm S235JR sem 35 2026"];
+  const JOBS = ["A-2026-001 — TDN Sprl — Borne anti-bélier poteau béton", "A-2026-004 — NG-Construction — Limons escalier découpe", "A-2026-017 — Aldi — Central Gembloux", "A-2026-019 — Bodart-Ricciardi", "A-2026-021 — Nonet — Fosses-la-Ville Phase 2", "A-2026-022 — Nonet — Villers-la-Ville", "A-2026-023 — VMA — LLN 796029-22131-1MIC2-MLLN", "A-2026-035 — Gobbe Xavier", "A-2026-057 — Argéa — Garde-corps Andre Olivier 01A9004", "A-2026-058 — Frateur — Courbevoie-Haut vent colonne vegetale", "A-2026-059 — Argéa — Angleur Tilff CDF S1100 2025 001381", "A-2026-060 — Nonet — Kraainem garde-corps et supplements N230891", "A-2026-078 — Aldi — Enghien échelle", "A-2026-081 — Argéa — Panneaux polycarbonate chantier 3969 client Infrabel", "A-2026-089 — ICM — Covalux Bastogne plats 200x20 laser", "A-2026-091 — ICM — Limons escalier Declerc Ciney laser ep12-15mm", "A-2026-095 — Danneels — Découpe laser Hannu et Mettet"];
   const labelOf = r => r.replace(/^A-\d{4}-\d+\s*[—-]\s*/, '');
 
   document.getElementById('nom').innerHTML = '<option value="">— choisis ton nom —</option>' + WORKERS.map(n=>'<option value="'+n+'">'+n+'</option>').join('') + '<option value="Autre">Autre…</option>';
