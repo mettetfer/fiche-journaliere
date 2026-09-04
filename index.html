@@ -52,7 +52,7 @@
 <body>
 <header>
   <h1>🔧 Fiche journalière</h1>
-  <p>Mettet-Fer — à remplir chaque soir · <b>v13</b> (build 03/09/2026)</p>
+  <p>Mettet-Fer — à remplir chaque soir · <b>v14</b> (build 04/09/2026)</p>
 </header>
 
 <div class="wrap">
@@ -137,7 +137,7 @@
   const EMAIL_BUREAU    = "info@mettet-fer.be";
 
   const WORKERS = ["Lloyd Lambert", "Quentin Dupont", "Benjamin Offrois", "Guillaume Delisse", "Thomas Pauly", "Arnaud Poulain", "Benjamin Dupont"];
-  const JOBS = ["A-2026-001 — TDN Sprl — Borne anti-bélier poteau béton", "A-2026-017 — Aldi — Central Gembloux", "A-2026-021 — Nonet — Fosses-la-Ville Phase 2", "A-2026-022 — Nonet — Villers-la-Ville", "A-2026-023 — VMA — LLN 796029-22131-1MIC2-MLLN", "A-2026-035 — Gobbe Xavier", "A-2026-046 — ICM — Escalier tournant Tero-Immo", "A-2026-057 — Argéa — Garde-corps Andre Olivier 01A9004", "A-2026-058 — Frateur — Courbevoie-Haut vent colonne vegetale", "A-2026-059 — Argéa — Angleur Tilff CDF S1100 2025 001381", "A-2026-078 — Aldi — Enghien échelle", "A-2026-081 — Argéa — Panneaux polycarbonate chantier 3969 client Infrabel", "A-2026-091 — ICM — Limons escalier Declerc Ciney laser ep12-15mm", "A-2026-101 — Nonet — Fosses-la-Ville Phase 3", "A-2026-105 — ICM — Prime Development Aiseau cornieres galva pliees 50x250x2", "A-2026-106 — ACT SRL — Complement etagere rangement echelles", "A-2026-107 — Argéa — U galva chantier 3969 (rechiffrage offre 2025-11-20)"];
+  const JOBS = ["A-2026-001 — TDN Sprl — Borne anti-bélier poteau béton", "A-2026-017 — Aldi — Central Gembloux", "A-2026-021 — Nonet — Fosses-la-Ville Phase 2", "A-2026-022 — Nonet — Villers-la-Ville", "A-2026-023 — VMA — LLN 796029-22131-1MIC2-MLLN", "A-2026-035 — Gobbe Xavier", "A-2026-046 — ICM — Escalier tournant Tero-Immo", "A-2026-057 — Argéa — Garde-corps Andre Olivier 01A9004", "A-2026-058 — Frateur — Courbevoie-Haut vent colonne vegetale", "A-2026-059 — Argéa — Angleur Tilff CDF S1100 2025 001381", "A-2026-078 — Aldi — Enghien échelle", "A-2026-081 — Argéa — Panneaux polycarbonate chantier 3969 client Infrabel", "A-2026-101 — Nonet — Fosses-la-Ville Phase 3", "A-2026-106 — ACT SRL — Complement etagere rangement echelles", "A-2026-107 — Argéa — U galva chantier 3969 (rechiffrage offre 2025-11-20)"];
   const labelOf = r => r.replace(/^A-\d{4}-\d+\s*[—-]\s*/, '');
 
   document.getElementById('nom').innerHTML = '<option value="">— choisis ton nom —</option>' + WORKERS.map(n=>'<option value="'+n+'">'+n+'</option>').join('') + '<option value="Autre">Autre…</option>';
