@@ -52,7 +52,7 @@
 <body>
 <header>
   <h1>🔧 Fiche journalière</h1>
-  <p>Mettet-Fer — à remplir chaque soir · <b>v21</b> (build 15/09/2026)</p>
+  <p>Mettet-Fer — à remplir chaque soir · <b>v22</b> (build 15/09/2026)</p>
 </header>
 
 <div class="wrap">
@@ -77,7 +77,11 @@
       <option value="Chômage temporaire">Chômage temporaire</option>
       <option value="Autre">Autre</option>
     </select>
-    <div class="daybox" id="noteEcole" style="display:none">🎓 Demi-jour école : pointe uniquement ta demi-journée de TRAVAIL (arrivée → départ) et tes chantiers. L'école ne se pointe pas.</div>
+    <div class="daybox" id="noteEcole" style="display:none">🎓 Demi-jour école : pointe ta demi-journée de TRAVAIL (arrivée → départ + chantiers) ET tes heures d'école ci-dessous.</div>
+    <div id="blocEcole" style="display:none">
+      <label>Heures d'école ce jour <span class="req">*</span></label>
+      <input type="number" id="heures_ecole" step="0.25" min="0" max="12" inputmode="decimal" placeholder="ex : 4">
+    </div>
   </div>
 
   <div class="card" id="cardJournee">
@@ -156,6 +160,7 @@
   function onTypeJour(){
     const v = document.getElementById('typejour').value;
     document.getElementById('noteEcole').style.display = v==='Presté + école' ? '' : 'none';
+    document.getElementById('blocEcole').style.display = (v==='Presté + école'||v==='Formation/école') ? '' : 'none';
     const presté = estPreste(v);
     document.getElementById('cardJournee').style.display = presté ? '' : 'none';
     document.getElementById('cardChantiers').style.display = presté ? '' : 'none';
@@ -260,7 +265,9 @@
     const date=document.getElementById('date').value;
     const nom=document.getElementById('nom').value.trim();
     const typejour=document.getElementById('typejour').value;
+    const estEcole=(typejour==='Presté + école'||typejour==='Formation/école');
     const base={date, ouvrier:nom, type_journee:typejour,
+      heures_ecole_dec: estEcole ? (parseFloat(document.getElementById('heures_ecole').value)||0) : 0,
       depart:document.getElementById('depart').value.trim(),
       lieux:document.getElementById('lieux').value.trim(),
       remarques:document.getElementById('remarques').value.trim(),
@@ -293,6 +300,7 @@
 
   function buildTexte(){
     const d=buildData(); let t=`FICHE JOURNALIÈRE\n${d.date} — ${d.ouvrier||'(nom manquant)'}\nType de journée : ${d.type_journee}\n`;
+    if(d.heures_ecole_dec>0) t+=`Heures d'école : ${d.heures_ecole_dec}h\n`;
     if(!estPreste(d.type_journee)){ if(d.remarques)t+=`\nRemarques : ${d.remarques}\n`; return t; }
     t+=`Horaire : ${d.arrivee||'?'} → ${d.depart_h||'?'} (pause ${d.pause_min} min) = ${d.total_heures_dec}h\n`;
     d.chantiers.forEach(c=>{
@@ -314,6 +322,8 @@
 
   function valider(data){
     if(!data.ouvrier){ alert("Merci de choisir ton nom avant d'envoyer."); return false; }
+    if((data.type_journee==='Presté + école'||data.type_journee==='Formation/école') && !(data.heures_ecole_dec>0)){
+      alert("Indique tes heures d'école (ex : 4)."); return false; }
     if(!estPreste(data.type_journee)) return true;
     if(!data.arrivee || !data.depart_h){ alert("Merci d'indiquer l'arrivée ET le départ de la journée."); return false; }
     if(data.chantiers.length===0){ alert("Ajoute au moins un chantier, ou change le type de journée."); return false; }
