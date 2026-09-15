@@ -52,7 +52,7 @@
 <body>
 <header>
   <h1>🔧 Fiche journalière</h1>
-  <p>Mettet-Fer — à remplir chaque soir · <b>v20</b> (build 13/09/2026)</p>
+  <p>Mettet-Fer — à remplir chaque soir · <b>v21</b> (build 15/09/2026)</p>
 </header>
 
 <div class="wrap">
@@ -65,17 +65,19 @@
     <label>Type de journée</label>
     <select id="typejour" onchange="onTypeJour()">
       <option value="Presté">Presté (jour de travail)</option>
+      <option value="Presté + école">Presté + école (demi-jour apprenti)</option>
       <option value="Congé payé">Congé payé</option>
       <option value="Maladie">Maladie</option>
       <option value="Jour férié">Jour férié</option>
       <option value="Récupération">Récupération</option>
-      <option value="Formation/école">Formation / école</option>
+      <option value="Formation/école">Formation / école (jour entier)</option>
       <option value="Absence justifiée">Absence justifiée</option>
       <option value="Absence injustifiée">Absence injustifiée</option>
       <option value="Congé sans solde">Congé sans solde</option>
       <option value="Chômage temporaire">Chômage temporaire</option>
       <option value="Autre">Autre</option>
     </select>
+    <div class="daybox" id="noteEcole" style="display:none">🎓 Demi-jour école : pointe uniquement ta demi-journée de TRAVAIL (arrivée → départ) et tes chantiers. L'école ne se pointe pas.</div>
   </div>
 
   <div class="card" id="cardJournee">
@@ -136,7 +138,7 @@
   const WHATSAPP_BUREAU = "32470000000";
   const EMAIL_BUREAU    = "info@mettet-fer.be";
 
-  const WORKERS = ["Lloyd Lambert", "Quentin Dupont", "Benjamin Offrois", "Guillaume Delisse", "Thomas Pauly", "Arnaud Poulain", "Benjamin Dupont"];
+  const WORKERS = ["Lloyd Lambert", "Quentin Dupont", "Benjamin Offrois", "Guillaume Delisse", "Thomas Pauly", "Arnaud Poulain", "Lucas Smith", "Benjamin Dupont"];
   const JOBS = ["A-2026-001 — TDN Sprl — Borne anti-bélier poteau béton", "A-2026-017 — Aldi — Central Gembloux", "A-2026-021 — Nonet — Fosses-la-Ville Phase 2", "A-2026-022 — Nonet — Villers-la-Ville", "A-2026-023 — VMA — LLN 796029-22131-1MIC2-MLLN", "A-2026-035 — Gobbe Xavier", "A-2026-046 — ICM — Escalier tournant Tero-Immo", "A-2026-053 — IN BW SC — 15 plaques metal (ref Frateur)", "A-2026-057 — Argéa — Garde-corps Andre Olivier 01A9004", "A-2026-058 — Frateur — Courbevoie-Haut vent colonne vegetale", "A-2026-059 — Argéa — Angleur Tilff CDF S1100 2025 001381", "A-2026-078 — Aldi — Enghien échelle", "A-2026-081 — Argéa — Panneaux polycarbonate chantier 3969 client Infrabel", "A-2026-084 — STEF Logistics Saintes — 100 petits ecarteurs", "A-2026-101 — Nonet — Fosses-la-Ville Phase 3", "A-2026-102 — André Baume — Terrasse galvanisée, escalier et garde-corps", "A-2026-106 — ACT SRL — Complement etagere rangement echelles", "A-2026-107 — Argéa — U galva chantier 3969 (rechiffrage offre 2025-11-20)", "A-2026-111 — Walvert — Fourniture inox 304 et acier larmé 5 mm", "A-2026-116 — ICM — 5000 plaquettes acier galva 100x140x2", "A-2026-119 — Agri Garden — Bac corten etanche pour etang (forme en L)"];
   const labelOf = r => r.replace(/^A-\d{4}-\d+\s*[—-]\s*/, '');
 
@@ -149,8 +151,12 @@
 
   let kmManual=false, compteur=0, dayMin=0;
 
+  const PRESTE_TYPES=['Presté','Presté + école'];
+  const estPreste=v=>PRESTE_TYPES.includes(v);
   function onTypeJour(){
-    const presté = document.getElementById('typejour').value === 'Presté';
+    const v = document.getElementById('typejour').value;
+    document.getElementById('noteEcole').style.display = v==='Presté + école' ? '' : 'none';
+    const presté = estPreste(v);
     document.getElementById('cardJournee').style.display = presté ? '' : 'none';
     document.getElementById('cardChantiers').style.display = presté ? '' : 'none';
     if(!presté) document.getElementById('cardDepl').style.display='none'; else updateDepl();
@@ -215,7 +221,7 @@
 
   function anyChantier(){ return [...document.querySelectorAll('.c-loc:checked')].some(r=>r.value==='Chantier'); }
   function updateDepl(){
-    const presté=document.getElementById('typejour').value==='Presté';
+    const presté=estPreste(document.getElementById('typejour').value);
     document.getElementById('cardDepl').style.display=(presté && anyChantier())?'':'none';
   }
   function recalcKm(){
@@ -259,7 +265,7 @@
       lieux:document.getElementById('lieux').value.trim(),
       remarques:document.getElementById('remarques').value.trim(),
       envoye_le:new Date().toISOString()};
-    if(typejour!=='Presté') return Object.assign(base,{arrivee:'',depart_h:'',pause_min:0,chantiers:[],km:0,total_heures_dec:0,heures_reparties_dec:0});
+    if(!estPreste(typejour)) return Object.assign(base,{arrivee:'',depart_h:'',pause_min:0,chantiers:[],km:0,total_heures_dec:0,heures_reparties_dec:0});
     const chantiers=[];
     document.querySelectorAll('.chantier').forEach((c,i)=>{
       const g=s=>(c.querySelector(s).value||'').trim();
@@ -287,7 +293,7 @@
 
   function buildTexte(){
     const d=buildData(); let t=`FICHE JOURNALIÈRE\n${d.date} — ${d.ouvrier||'(nom manquant)'}\nType de journée : ${d.type_journee}\n`;
-    if(d.type_journee!=='Presté'){ if(d.remarques)t+=`\nRemarques : ${d.remarques}\n`; return t; }
+    if(!estPreste(d.type_journee)){ if(d.remarques)t+=`\nRemarques : ${d.remarques}\n`; return t; }
     t+=`Horaire : ${d.arrivee||'?'} → ${d.depart_h||'?'} (pause ${d.pause_min} min) = ${d.total_heures_dec}h\n`;
     d.chantiers.forEach(c=>{
       t+=`\n— CHANTIER ${c.num} — (${c.localisation})\n`;
@@ -308,7 +314,7 @@
 
   function valider(data){
     if(!data.ouvrier){ alert("Merci de choisir ton nom avant d'envoyer."); return false; }
-    if(data.type_journee!=='Presté') return true;
+    if(!estPreste(data.type_journee)) return true;
     if(!data.arrivee || !data.depart_h){ alert("Merci d'indiquer l'arrivée ET le départ de la journée."); return false; }
     if(data.chantiers.length===0){ alert("Ajoute au moins un chantier, ou change le type de journée."); return false; }
     for(const c of data.chantiers){
