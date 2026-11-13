@@ -52,7 +52,7 @@
 <body>
 <header>
   <h1>🔧 Fiche journalière</h1>
-  <p>Mettet-Fer — à remplir chaque soir · <b>v59</b> (build 11/11/2026)</p>
+  <p>Mettet-Fer — à remplir chaque soir · <b>v60</b> (build 13/11/2026)</p>
 </header>
 
 <div class="wrap">
@@ -143,7 +143,7 @@
   const EMAIL_BUREAU    = "info@mettet-fer.be";
 
   const WORKERS = ["Lloyd Lambert", "Quentin Dupont", "Benjamin Offrois", "Guillaume Delisse", "Thomas Pauly", "Arnaud Poulain", "Lucas Smith", "Benjamin Dupont"];
-  const JOBS = ["A-2026-017 — Aldi — Central Gembloux", "A-2026-021 — Nonet — Fosses-la-Ville Phase 2", "A-2026-022 — Nonet — Villers-la-Ville", "A-2026-027 — Kramboussanos Giovanni — Escalier quart-tournant Somtet mettet", "A-2026-046 — ICM — Escalier tournant Tero-Immo", "A-2026-057 — Argéa — Garde-corps Andre Olivier 01A9004", "A-2026-062 — Nonet — Caniveau Grognon N712003", "A-2026-080 — Nonet — Passerelle BO Belgrade N200784 revision offre", "A-2026-081 — Argéa — Panneaux polycarbonate chantier 3969 client Infrabel", "A-2026-102 — André Baume — Terrasse galvanisée, escalier et garde-corps", "A-2026-169 — Argea — Angleur Tilff 8 m supplementaires et adaptation Z (Infrabel)", "A-2026-227 — AB DESIGN CONSULTING-support pierre de cuisine", "A-2026-239 — TDN Sprl — Cornieres acier galva 40 x 3 m percees (BDC 2026-340)", "A-2026-247 — ICM — Eurecayphas B3 toles pliees acier galva ep3mm (BC LGE0081)", "A-2026-248 — Argea — Ch 3955 cornieres gauches et droites renforcement bac beton", "A-2026-267 — Nonet — Fosses-la-Ville Phase 5", "A-2026-269 — ICM — I-CARE Mons profil U galva 80-410-80 ep2 L2750", "A-2026-271 — Danneels — Panneau publicitaire", "A-2026-274 — SD métal-couvre mur acier 5 mm"];
+  const JOBS = ["A-2026-017 — Aldi — Central Gembloux", "A-2026-021 — Nonet — Fosses-la-Ville Phase 2", "A-2026-022 — Nonet — Villers-la-Ville", "A-2026-027 — Kramboussanos Giovanni — Escalier quart-tournant Somtet mettet", "A-2026-046 — ICM — Escalier tournant Tero-Immo", "A-2026-057 — Argéa — Garde-corps Andre Olivier 01A9004", "A-2026-062 — Nonet — Caniveau Grognon N712003", "A-2026-080 — Nonet — Passerelle BO Belgrade N200784 revision offre", "A-2026-081 — Argéa — Panneaux polycarbonate chantier 3969 client Infrabel", "A-2026-102 — André Baume — Terrasse galvanisée, escalier et garde-corps", "A-2026-169 — Argea — Angleur Tilff 8 m supplementaires et adaptation Z (Infrabel)", "A-2026-227 — AB DESIGN CONSULTING-support pierre de cuisine", "A-2026-239 — TDN Sprl — Cornieres acier galva 40 x 3 m percees (BDC 2026-340)", "A-2026-247 — ICM — Eurecayphas B3 toles pliees acier galva ep3mm (BC LGE0081)", "A-2026-248 — Argea — Ch 3955 cornieres gauches et droites renforcement bac beton", "A-2026-266 — SD Metal — Caniveau corten", "A-2026-267 — Nonet — Fosses-la-Ville Phase 5", "A-2026-269 — ICM — I-CARE Mons profil U galva 80-410-80 ep2 L2750", "A-2026-271 — Danneels — Panneau publicitaire", "A-2026-274 — SD métal-couvre mur acier 5 mm", "A-2026-278 — SD Metal — Découpe laser 3 mm et 10 mm + pliages sem 46-2026"];
   const labelOf = r => r.replace(/^A-\d{4}-\d+\s*[—-]\s*/, '');
 
   document.getElementById('nom').innerHTML = '<option value="">— choisis ton nom —</option>' + WORKERS.map(n=>'<option value="'+n+'">'+n+'</option>').join('') + '<option value="Autre">Autre…</option>';
